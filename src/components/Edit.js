@@ -22,7 +22,7 @@ const Edit = () => {
     .then((response)=>{
       reset(response.data)
     })
-  },[])
+  },[id])
 
 
   return (<EditiStyled>

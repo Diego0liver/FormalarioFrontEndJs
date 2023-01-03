@@ -10,18 +10,31 @@ const Cliente = () => {
     const [cliente, setCliente] = useState([])
     const { id } = useParams()
     let history = useNavigate()
+    
+    useEffect(() => {
+      if ( id ) {
+          axios.get(`http://localhost:4000/form/${id}`)
+              .then(res => {
+                  setCliente(res.data) 
+              })
+              .catch(err => {
+                  console.log(err)
+              })}
+  }, [ id ]);
 
-    useEffect(()=>{  
-    loadForm()
-      },[]);
-      
-      const loadForm = async () => {
-        try {const result = await axios.get(`http://localhost:4000/form/${id}`)
-        setCliente(result.data)}catch(erro){
-          console.log(erro)
-        }
-      } 
-     
+
+
+ //Soma de idade
+ const age =(cliente)=>{
+    const a = cliente.datas
+    if(cliente.datas !== undefined){
+        return a.slice(0, -6)
+    }}
+ const numberAge = Number(age(cliente))
+ const dataAtual = new Date();
+const anoAtual = dataAtual. getFullYear();
+const soma = anoAtual - numberAge
+//
 
 
   return (<ClientStyled>
@@ -35,6 +48,7 @@ const Cliente = () => {
             <li>Telefone: {cliente.telefone}</li>
             <li>E-mail: {cliente.email}</li>
             <li>Data de nascimento: {cliente.datas}</li>
+            <li>Idade: {soma}</li>
             <li>Sexo: {cliente.sexo}</li>
             <li>Estado civil: {cliente.estado_civil}</li>
             <li>CPF: {cliente.cpf}</li>
@@ -44,9 +58,12 @@ const Cliente = () => {
             <li>Cidade: {cliente.cidade}</li>
             <li>Estado: {cliente.estado}</li>
             <li>Numero da casa: {cliente.n_casa}</li>
+            
           </ul>
           <button onClick={()=>history("/")}>Voltar</button>
           <button onClick={()=>gerarPdf(cliente)}>Gerar PDF</button>
+         
+          
   </ClientStyled>
   )
  
